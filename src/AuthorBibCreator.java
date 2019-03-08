@@ -9,7 +9,8 @@ public class AuthorBibCreator {
 		// TODO Attempt to open all 10 input files
 		Scanner [] inputFiles = new Scanner[10];
 
-		//
+		// TODO Find delimiters for Strings
+
     }
 
     public static void processBibFiles(){}
