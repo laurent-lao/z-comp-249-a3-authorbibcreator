@@ -28,7 +28,7 @@
     2. It must have a parametized constructor for a specified message
 3.  Entering author name
     1. Require the user to enter an author name, then attempt to open all 10 input files for reading
-    2. If "any" if these files does not exist, the program must display an error message
+    2. If "any" of these files does not exist, the program must display an error message
     3. These files must close all opened files before exiting the program.
 4. After all 10 input files are opened
     1. Check if any files already exists and throw FileExistsException

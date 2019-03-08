@@ -12,26 +12,43 @@ public class Article {
 	private String month;
 	private String keywords;
 
+	/**
+	 * Default constructor for Article -> Notifies the user that it ran as default
+	 */
 	public Article(){
-		System.out.println("NOTE: The default constructor has been triggered.");
+		System.out.println("NOTE: The default constructor has been triggered. All Article attributes are null.");
 	}
 
-
-	public Article(String input){
+	/**
+	 * Parameterized constructor for Article
+	 * @param jsonData a String representing the JSON data of an article (in curly braces after @ARTICLE)
+	 */
+	public Article(String jsonData){
 		// use helper method to initialize the Article
-		parseInput(input);
+		parseInput(jsonData);
 	}
 
-	// Debugger main
+	/**
+	 * Class debugger
+	 * @param args String for main arguments
+	 */
 	public static void main(String[] args){
 
 	}
 
-
-	private void parseInput(String input){
+	/**
+	 * Helper method to initialize Article attributes
+	 * @param jsonData a String representing the JSON data of an article (in curly braces after @ARTICLE)
+	 */
+	private void parseInput(String jsonData){
 
 	}
 
+	/**
+	 * Helper method to parse Authors into an array
+	 * @param author
+	 * @return
+	 */
 	private String [] parseAuthor(String author){
 		String [] tempAuthor = new String[0];
 
