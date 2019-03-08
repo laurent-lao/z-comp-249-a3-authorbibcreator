@@ -22,11 +22,23 @@ public class Article {
 		parseInput(input);
 	}
 
+	// Debugger main
+	public static void main(String[] args){
+
+	}
+
+
 	private void parseInput(String input){
 
 	}
 
 	private String [] parseAuthor(String author){
+		String [] tempAuthor = new String[0];
 
+		// TODO algorithm to parseAuthor
+		String newAuthor = "";
+		tempAuthor = Helper.appendToArray(tempAuthor, newAuthor);
+
+		return tempAuthor;
 	}
 }
