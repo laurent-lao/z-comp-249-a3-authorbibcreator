@@ -12,19 +12,10 @@ public class FileExistsException extends Exception {
 
 	/**
 	 * FileExistsException constructor with the name of the file
-	 * @param author String containing the author's name to be used for the name of the file
+	 * @param filename String containing the author's name to be used for the name of the file
 	 */
-	public FileExistsException(String author){
-		super("Exception: There is already an existing file for that author. File will be renamed as " + author+"-BU.json, and older BU files will be deleted!");
+	public FileExistsException(String filename){
+		super("\nA file already exists with the name: " + filename + ".json\n" +
+				"File will be renamed as: " + filename + "-BU.json and any old BUs will be deleted.\n");
 	}
-
-	// //Class tester
-	//public static void main(String[] args)
-	//{
-	//	FileExistsException e = new FileExistsException();
-	//	FileExistsException b = new FileExistsException("Test");
-	//
-	//	System.out.println(e.getMessage());
-	//	System.out.println(b.getMessage());
-	//}
 }

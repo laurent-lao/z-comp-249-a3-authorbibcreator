@@ -1,5 +1,4 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Scanner;
 
 public class AuthorBibCreator {
@@ -7,11 +6,8 @@ public class AuthorBibCreator {
 	public static void main(String[] args) {
 
 		// Variables
-		int       scannerCount       = 0;                           // Stores how many scanners were opened
-		int       writerCount        = 0;                           // Stores how many writerIndex were opened
-		Scanner[] readFiles          = new Scanner[10];             // Stores the scanner for reach
-		boolean   deleteCreatedFiles = false;						// Whether the program should delete created files
-		final String[] inputFiles = new String[] {"Latex1.bib", 	// Stores the files to be read
+		int exitMessageNumber = 0;
+		final String[] inputFiles = new String[] {"Latex1.bib",         // Stores the files to be read
 												  "Latex2.bib",
 												  "Latex3.bib",
 												  "Latex4.bib",
@@ -22,13 +18,29 @@ public class AuthorBibCreator {
 												  "Latex9.bib",
 												  "Latex10.bib"};
 
+		// Display Welcome Message
 		displayWelcomeMessage();
 
-		// TODO Prompt for an author's name
+		// Prompt for an author's name
 		String authorName = promptUserForAuthorName();
-		String [] writeFiles = new String[]{authorName+"-IEEE", authorName+"-ACM", authorName+"-NJ"};
-		String writeFileExtension = ".json";
-		// TODO Attempt to open all 10 input files
+
+		// Prepares the program's output files name
+		String[]      outputFileAuthorFormat = new String[] {authorName + "-IEEE", authorName + "-ACM", authorName + "-NJ"};
+		String        outputFileExtension    = ".json";
+		PrintWriter[] writeFiles             = new PrintWriter[outputFileAuthorFormat.length];        // Stores the writer for each json file
+		File[]        outputFiles            = new File[outputFileAuthorFormat.length];            // Stores the file for each json file;
+		File[]        backupFile             = new File[outputFileAuthorFormat.length];                // Stores the backup file for each json file;
+		for (int i = 0; i < outputFileAuthorFormat.length; i++)
+		{
+			// Create File objects with author's name
+			outputFiles[i] = new File(outputFileAuthorFormat[i] + outputFileExtension);
+			String backupFileName = outputFileAuthorFormat[i] + "-BU" + outputFileExtension;
+			backupFile[i] = new File(backupFileName);
+		}
+
+		// Attempt to open all 10 input files
+		int       scannerCount = 0;                                // Stores how many scanners were opened
+		Scanner[] readFiles    = new Scanner[inputFiles.length];    // Stores the scanner for each bib file
 		for (int i = 0; i < inputFiles.length; i++)
 		{
 			try
@@ -37,47 +49,212 @@ public class AuthorBibCreator {
 				scannerCount++;
 			} catch (FileNotFoundException e)
 			{
-				System.out.println(e.getMessage() + "\nFile" + inputFiles[i] + " not found.");
+				System.out.println("Could not open file " + inputFiles[i] + " for reading.");
+				exitMessageNumber = 1;
 				break;
 			}
 		}
 
 		// Only run if all Scanners were successfully opened
+		int     writerCount              = 0;                     // Stores how many writerIndex were opened
+		boolean haveToDeleteCreatedFiles = false;                 // Whether the program should delete created files
 		if (scannerCount == inputFiles.length)
 		{
-			// TODO Attempt to create all 3 writing files
+			for (int i = 0; i < outputFiles.length; i++)
+			{
+				try
+				{
+					if (outputFiles[i].exists())
+					{
+						throw new FileExistsException(outputFileAuthorFormat[i]);
+					}
+				} catch (FileExistsException f)
+				{
+					System.out.println(f.getMessage());
 
-			// TODO Find delimiters for Strings
+					try
+					{
+						if (backupFile[i].exists())
+						{
+							if (!backupFile[i].delete())
+							{
+								// Throw exception if unable to delete
+								throw new Exception("File " + backupFile[i] + "unsuccessfully deleted.");
+							}
+						}
+
+						// Rename the existing file into -BU
+						if (!outputFiles[i].renameTo(backupFile[i]))
+						{
+							// Throw exception if unable to create backup file
+							throw new Exception("Cannot create backup file");
+						}
+					} catch (Exception h)
+					{
+						System.out.println("Error: " + h.getMessage());
+						haveToDeleteCreatedFiles = true;
+						exitMessageNumber = 2;
+						break;
+					}
+				} finally
+				{
+					try
+					{
+						writeFiles[i] = new PrintWriter(new FileOutputStream(outputFiles[i]));
+						writerCount++;
+					} catch (FileNotFoundException e)
+					{
+						haveToDeleteCreatedFiles = true;
+						System.out.println(e.getMessage() + "\nPrintWriter could not create " + outputFiles[i]);
+						exitMessageNumber = 3;
+						break;
+					}
+				}
+			}
+
+			// Only run if all PrintWriters were initialized correctly
+			if (writerCount == outputFileAuthorFormat.length)
+			{
+				if (!processBibFiles(readFiles, writeFiles, authorName))
+				{
+					// If author was not found in the articles
+					System.out.println("\nNo records were found for author(s) with name: " + authorName);
+					exitMessageNumber = 4;
+				}
+			}
 
 		}
 
-		// TODO Close Writers
+		// Debug
+		// haveToDeleteCreatedFiles = true; // Use this to delete created files
+		// Delete previously created files if flag is true
+		if (haveToDeleteCreatedFiles)
+		{
+			System.out.println("Deleting created files.");
+
+			for (int i = 0; i < outputFileAuthorFormat.length; i++)
+			{
+				if (outputFiles[i].exists())
+				{
+					outputFiles[i].delete();
+				}
+
+				if (backupFile[i].exists())
+				{
+					backupFile[i].delete();
+				}
+			}
+		}
+
+		// Close Writer
+		for (int i = 0; i < writerCount; i++)
+		{
+			writeFiles[i].close();
+			System.out.println("Debug PrintWriter closer: Closing PrintWriter " + i);
+		}
 
 		// Close Scanner
 		for (int i = 0; i < scannerCount; i++)
 		{
 			readFiles[i].close();
+			System.out.println("Debug Scanner closer: Closing Scanner " + i);
 		}
 
-		displayExitMessage();
+		// Display Exit message
+		displayExitMessage(exitMessageNumber);
 
 	}
 
-	public static void processBibFiles() {
+	/**
+	 * Creates appropriate formatted references of a specific author's article in the .json files
+	 *
+	 * @param bibFiles    an array containing the Scanners of all bibFiles
+	 * @param outputFiles an array containing the PrintWriter of each reference style
+	 * @param author      a String containing the specific author's name
+	 */
+	public static boolean processBibFiles(Scanner[] bibFiles, PrintWriter[] outputFiles, String author) {
+
+		boolean foundAuthor = false;
+		int numberOfRecords = 0;
+		Article [] articles = new Article[0];
+
+		// Store the articles into a array of Article objects
+		for (int i = 0; i < bibFiles.length; i++)
+		{
+			bibFiles[i].useDelimiter("@ARTICLE");
+
+			while (bibFiles[i].hasNext())
+			{
+				try
+				{
+					String jsonData = bibFiles[i].next();
+					if (jsonData != null)
+					{
+						Article currentArticle = new Article(bibFiles[i].next());
+						articles = Helper.appendToArticleArray(articles, currentArticle);
+					}
+				} catch (Exception e)
+				{
+					//ignore exception
+				}
+			}
+		}
+
+		// Debug printing articles
+		for (int i = 0; i < articles.length; i++)
+		{
+			System.out.println("Printing article " + i + ": " + articles[i]);
+		}
+
+		if (foundAuthor)
+		{
+			// Runs if author was found
+			System.out.println("A total of " + numberOfRecords + " records were found for author(s) with name: " + author);
+			System.out.println("Files " + author + "-IEEE.json, " + author + "-ACM.json, and " + author + "-NJ.json have been created!" + "\n\n");
+		}
+		return foundAuthor;
 	}
 
-	public static String promptUserForAuthorName(){
+	/**
+	 * Prompts user for the author name they want to search for
+	 *
+	 * @return a String representing the author name the user has inputted
+	 */
+	public static String promptUserForAuthorName() {
 		Scanner kb = new Scanner(System.in);
-		System.out.println("Please enter the author name you are targeting: ");
+		System.out.print("Please enter the author name you are targeting: ");
+		String authorName = kb.nextLine();
 
-		return kb.nextLine();
+		return authorName;
 	}
 
-	public static void displayWelcomeMessage(){
+	/**
+	 * Displays a welcome message
+	 */
+	public static void displayWelcomeMessage() {
 		System.out.println("Welcome to Laurent's BibCreator!\n");
 	}
 
-	public static void displayExitMessage(){
-		System.out.println("\nGoodbye! Hope you have enjoyed creating the needed files using AuthorBibCreator.");
+	/**
+	 * Display an exit message
+	 */
+	public static void displayExitMessage(int exitMessageNumber) {
+		switch (exitMessageNumber)
+		{
+			case 1:
+				System.out.println("Please check if file exists! Program has closed any opened files and is terminating.");
+				break;
+			case 2:
+				System.out.println("The backup files (-BU.json) are causing some problems. Please delete them manually. The Program has closed any opened files and is terminating.");
+				break;
+			case 3:
+				System.out.println("There were some problems with writing into the output files. The Program has deleted and closed any opened files and is terminating.");
+			case 4:
+				System.out.println("No files have been created!\n");
+			default:
+				System.out.println("\nGoodbye! Hope you have enjoyed creating the needed files using AuthorBibCreator.");
+				break;
+		}
+
 	}
 }
