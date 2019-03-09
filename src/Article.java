@@ -137,12 +137,9 @@ public class Article {
 		{
 			char charToCheck = toBeCleaned[i];
 
-			// Check if the character is one of the accepted characters
-			boolean isLowerAlpha        = charToCheck >= 'a' && charToCheck <= 'z';
-			boolean isUpperAlpha        = charToCheck >= 'A' && charToCheck <= 'Z';
-			boolean isNumber            = charToCheck >= '0' && charToCheck <= '9';
-			boolean isAcceptedCharacter = (charToCheck == ' ') || (charToCheck == '.') || (charToCheck == '-') || (charToCheck == '/') || (charToCheck == ';');
-			if (isLowerAlpha || isUpperAlpha || isNumber || isAcceptedCharacter)
+			// Remove curly braces
+			boolean isCurlyBraces = charToCheck == '{' || charToCheck == '}';
+			if (!isCurlyBraces)
 			{
 				// Only add the character to the string if it is one of the accepted characters
 				cleanedUp += charToCheck;
@@ -161,18 +158,29 @@ public class Article {
 	 */
 	private String[] parseAuthor(String authors) {
 
-		String[] separatedAuthor = new String[0];
-		StringTokenizer readAuthors = new StringTokenizer(authors);
+		String[]        separatedAuthor = new String[0];
+		StringTokenizer readAuthors     = new StringTokenizer(authors);
 
 		while (readAuthors.hasMoreTokens())
 		{
 			String newAuthor = readAuthors.nextToken();
 
-			// Append the next strings to "newAuthor" until it hits and "and"
+			// Capitalize firstLetter
+			String firstLetter   = newAuthor.substring(0, 1).toUpperCase();
+			String restOfLetters = newAuthor.substring(1);
+			newAuthor = firstLetter + restOfLetters;
+
+			// Append the next strings to "newAuthor" until it hits an "and"
 			while (readAuthors.hasMoreTokens())
 			{
 				String nextString = readAuthors.nextToken();
-				if (nextString.equals("and"))
+
+				// Capitalize first letter
+				firstLetter = nextString.substring(0, 1).toUpperCase();
+				restOfLetters = nextString.substring(1);
+				nextString = firstLetter + restOfLetters;
+
+				if (nextString.equalsIgnoreCase("and"))
 				{
 					break;
 				}
@@ -190,16 +198,91 @@ public class Article {
 		return separatedAuthor;
 	}
 
-	public String toString() {
-
-		String ffff = "";
+	/**
+	 * Checks whether a string is matches "authors" attribute
+	 * @param authorToFind a String representing the search term
+	 * @return a bool representing whether the string was found or not
+	 */
+	public boolean authorMatches(String authorToFind) {
 		for (int i = 0; i < authors.length; i++)
 		{
-			ffff += authors[i] + " !!! ";
+			if (authors[i].contains(authorToFind))
+			{
+				return true;
+			}
+		}
+
+		// When it hits here, it was not found.
+		return false;
+	}
+
+	/**
+	 * Get the IEEE citation format
+	 * @return a String containing the IEEE citation format for the article
+	 */
+	public String getIEEEformat() {
+		String ieeeFormat = "";
+
+		// Formatting authors
+		String authorToString = "";
+		for (int i = 0; i < authors.length; i++)
+		{
+			if (i < (authors.length - 1))
+			{
+				authorToString += authors[i] + ", ";
+			}
+			else
+			{
+				authorToString += authorToString + ".";
+			}
+		}
+		// Add all information
+		ieeeFormat += authorToString + " " + "\"" + title + "\"" + ", " + journal + ", " + "vol. " + volume + ", no. " + number + ", p. " + pages + ", " + month + " " + year;
+
+		return ieeeFormat;
+	}
+
+	/**
+	 * Get the NJ citation format
+	 * @return a String containing the NJ citation format for the article
+	 */
+	public String getNJformat() {
+		String njFormat = "";
+
+		return njFormat;
+	}
+
+	/**
+	 * Get the ACM citation format
+	 * @return a String containing the ACM citation format for the article
+	 */
+	public String getACMformat() {
+		String acmFormat = "";
+
+		return acmFormat;
+	}
+
+	/**
+	 * Basic to String
+	 * @return a String printing the attributes of the object
+	 */
+	public String toString() {
+
+		String authorToString = "";
+		for (int i = 0; i < authors.length; i++)
+		{
+			if (i != (authors.length - 1))
+			{
+				authorToString += authors[i] + ", ";
+			}
+			else
+			{
+				authorToString += authors[i];
+			}
 		}
 
 		return "Article{" +
-				"authors=" + ffff +
+				"authors=" + authorToString +
 				", journal='" + journal + '\'' +
 				", title='" + title + '\'' +
 				", year='" + year + '\'' +

@@ -126,7 +126,7 @@ public class AuthorBibCreator {
 		}
 
 		// Debug
-		// haveToDeleteCreatedFiles = true; // Use this to delete created files
+		haveToDeleteCreatedFiles = true; // Use this to delete created files
 		// Delete previously created files if flag is true
 		if (haveToDeleteCreatedFiles)
 		{
@@ -188,22 +188,39 @@ public class AuthorBibCreator {
 				try
 				{
 					String jsonData = bibFiles[i].next();
-					if (jsonData != null)
+
+					// Make sure to use a valid jsonData (contains at least an equal sign somewhere)
+					if (jsonData.contains("="))
 					{
-						Article currentArticle = new Article(bibFiles[i].next());
+						// Create an Article object
+						Article currentArticle = new Article(jsonData);
 						articles = Helper.appendToArticleArray(articles, currentArticle);
 					}
+
 				} catch (Exception e)
 				{
-					//ignore exception
+					// Ignore exception
+					bibFiles[i].next();
 				}
 			}
 		}
 
-		// Debug printing articles
+		// Debug Print
 		for (int i = 0; i < articles.length; i++)
 		{
-			System.out.println("Printing article " + i + ": " + articles[i]);
+			System.out.println(articles[i]);
+		}
+
+		System.out.println("\n\n\n\nPrinting Found records: ");
+		// Check to see if there is a matching author
+		for (int i = 0; i < articles.length; i++)
+		{
+				if (articles[i].authorMatches(author))
+				{
+					foundAuthor = true;
+					numberOfRecords++;
+					System.out.println(articles[i]);
+				}
 		}
 
 		if (foundAuthor)
