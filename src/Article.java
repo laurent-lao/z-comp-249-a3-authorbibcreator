@@ -1,5 +1,8 @@
 import java.util.StringTokenizer;
 
+/**
+ * Article class that contains the information of a reference
+ */
 public class Article {
 
 	private String[] authors;
@@ -249,6 +252,20 @@ public class Article {
 	public String getNJformat() {
 		String njFormat = "";
 
+		// Formatting authors
+		String authorToString = "";
+		for (int i = 0; i < authors.length; i++)
+		{
+			if (i < (authors.length - 1))
+			{
+				authorToString += authors[i] + " & ";
+			}
+			else
+			{
+				authorToString += authorToString + ".";
+			}
+		}
+		njFormat += authorToString + ". " + title + ". " + journal + ". " + volume + ", " + pages + "(" + year + ").";
 		return njFormat;
 	}
 
@@ -259,6 +276,12 @@ public class Article {
 	public String getACMformat() {
 		String acmFormat = "";
 
+		// Formatting authors
+		String authorToString = "";
+		authorToString += authors[0] + " et al.";
+
+		// Add all information
+		acmFormat += authorToString + " " + year + ". " + title + ". " + journal + "." + volume + ", " + number + "(" + year + ")," + pages + ". DOI: https://doi.org/" + doi + ".";
 		return acmFormat;
 	}
 

@@ -70,12 +70,15 @@ public class AuthorBibCreator {
 					}
 				} catch (FileExistsException f)
 				{
+					// The File already exists
 					System.out.println(f.getMessage());
 
+					// Creating backup file
 					try
 					{
 						if (backupFile[i].exists())
 						{
+							// If there is already a backup file, delete it
 							if (!backupFile[i].delete())
 							{
 								// Throw exception if unable to delete
@@ -96,14 +99,16 @@ public class AuthorBibCreator {
 						exitMessageNumber = 2;
 						break;
 					}
-				} finally
+				} finally // run this afterwards
 				{
 					try
 					{
+						// Open the PrintWriter files
 						writeFiles[i] = new PrintWriter(new FileOutputStream(outputFiles[i]));
 						writerCount++;
 					} catch (FileNotFoundException e)
 					{
+						// If unable to Printwriter files, delete files, notify user
 						haveToDeleteCreatedFiles = true;
 						System.out.println(e.getMessage() + "\nPrintWriter could not create " + outputFiles[i]);
 						exitMessageNumber = 3;
@@ -115,6 +120,7 @@ public class AuthorBibCreator {
 			// Only run if all PrintWriters were initialized correctly
 			if (writerCount == outputFileAuthorFormat.length)
 			{
+				// Find the author among the citations
 				if (!processBibFiles(readFiles, writeFiles, authorName))
 				{
 					// If author was not found in the articles
@@ -126,7 +132,7 @@ public class AuthorBibCreator {
 		}
 
 		// Debug
-		haveToDeleteCreatedFiles = true; // Use this to delete created files
+		//haveToDeleteCreatedFiles = true; // Use this to delete created files
 		// Delete previously created files if flag is true
 		if (haveToDeleteCreatedFiles)
 		{
@@ -150,14 +156,14 @@ public class AuthorBibCreator {
 		for (int i = 0; i < writerCount; i++)
 		{
 			writeFiles[i].close();
-			System.out.println("Debug PrintWriter closer: Closing PrintWriter " + i);
+			//System.out.println("Debug PrintWriter closer: Closing PrintWriter " + i);
 		}
 
 		// Close Scanner
 		for (int i = 0; i < scannerCount; i++)
 		{
 			readFiles[i].close();
-			System.out.println("Debug Scanner closer: Closing Scanner " + i);
+			//System.out.println("Debug Scanner closer: Closing Scanner " + i);
 		}
 
 		// Display Exit message
@@ -174,13 +180,14 @@ public class AuthorBibCreator {
 	 */
 	public static boolean processBibFiles(Scanner[] bibFiles, PrintWriter[] outputFiles, String author) {
 
-		boolean foundAuthor = false;
-		int numberOfRecords = 0;
-		Article [] articles = new Article[0];
+		boolean   foundAuthor     = false;
+		int       numberOfRecords = 0;
+		Article[] articles        = new Article[0];
 
 		// Store the articles into a array of Article objects
 		for (int i = 0; i < bibFiles.length; i++)
 		{
+			// Use @ARTICLE as the separator
 			bibFiles[i].useDelimiter("@ARTICLE");
 
 			while (bibFiles[i].hasNext())
@@ -192,7 +199,7 @@ public class AuthorBibCreator {
 					// Make sure to use a valid jsonData (contains at least an equal sign somewhere)
 					if (jsonData.contains("="))
 					{
-						// Create an Article object
+						// Create an Article object which parses the jsonData properly
 						Article currentArticle = new Article(jsonData);
 						articles = Helper.appendToArticleArray(articles, currentArticle);
 					}
@@ -200,33 +207,35 @@ public class AuthorBibCreator {
 				} catch (Exception e)
 				{
 					// Ignore exception
-					bibFiles[i].next();
+					continue;
+					// bibFiles[i].next();
 				}
 			}
 		}
 
-		// Debug Print
-		for (int i = 0; i < articles.length; i++)
-		{
-			System.out.println(articles[i]);
-		}
-
-		System.out.println("\n\n\n\nPrinting Found records: ");
 		// Check to see if there is a matching author
+		PrintWriter ieee = outputFiles[0];
+		PrintWriter acm = outputFiles[1];
+		PrintWriter nj = outputFiles[2];
 		for (int i = 0; i < articles.length; i++)
 		{
-				if (articles[i].authorMatches(author))
-				{
-					foundAuthor = true;
-					numberOfRecords++;
-					System.out.println(articles[i]);
-				}
+			if (articles[i].authorMatches(author))
+			{
+				foundAuthor = true;
+				numberOfRecords++;
+
+				// Print to file
+				ieee.println(articles[i].getIEEEformat() + "\n");
+				acm.println("[" + numberOfRecords + "]\t\t" + articles[i].getACMformat() + "\n");
+				nj.println(articles[i].getNJformat() + "\n");
+
+			}
 		}
 
 		if (foundAuthor)
 		{
 			// Runs if author was found
-			System.out.println("A total of " + numberOfRecords + " records were found for author(s) with name: " + author);
+			System.out.println("\nA total of " + numberOfRecords + " records were found for author(s) with name: " + author);
 			System.out.println("Files " + author + "-IEEE.json, " + author + "-ACM.json, and " + author + "-NJ.json have been created!" + "\n\n");
 		}
 		return foundAuthor;
