@@ -7,7 +7,7 @@ public class AuthorBibCreator {
 
 		// Variables
 		int exitMessageNumber = 0;
-		final String[] inputFiles = new String[] {"Latex1.bib",         // Stores the files to be read
+		final String[] inputFiles = new String[] {"Latex1.bib",         // Stores the files to be read, SPECIFY THE FILES HERE!!!
 												  "Latex2.bib",
 												  "Latex3.bib",
 												  "Latex4.bib",
