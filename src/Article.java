@@ -236,11 +236,11 @@ public class Article {
 			}
 			else
 			{
-				authorToString += authorToString + ".";
+				authorToString += authors[i] + ".";
 			}
 		}
 		// Add all information
-		ieeeFormat += authorToString + " " + "\"" + title + "\"" + ", " + journal + ", " + "vol. " + volume + ", no. " + number + ", p. " + pages + ", " + month + " " + year;
+		ieeeFormat += authorToString + " " + "\"" + title + "\"" + ", " + journal + ", " + "vol. " + volume + ", no. " + number + ", p. " + pages + ", " + month + " " + year + ".";
 
 		return ieeeFormat;
 	}
@@ -262,7 +262,7 @@ public class Article {
 			}
 			else
 			{
-				authorToString += authorToString + ".";
+				authorToString += authors[i] + ".";
 			}
 		}
 		njFormat += authorToString + ". " + title + ". " + journal + ". " + volume + ", " + pages + "(" + year + ").";
