@@ -265,7 +265,7 @@ public class Article {
 				authorToString += authors[i] + ".";
 			}
 		}
-		njFormat += authorToString + ". " + title + ". " + journal + ". " + volume + ", " + pages + "(" + year + ").";
+		njFormat += authorToString + " " + title + ". " + journal + ". " + volume + ", " + pages + "(" + year + ").";
 		return njFormat;
 	}
 
