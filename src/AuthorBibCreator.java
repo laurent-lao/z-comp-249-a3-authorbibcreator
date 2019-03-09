@@ -235,8 +235,8 @@ public class AuthorBibCreator {
 		if (foundAuthor)
 		{
 			// Runs if author was found
-			System.out.println("\nA total of " + numberOfRecords + " records were found for author(s) with name: " + author);
-			System.out.println("Files " + author + "-IEEE.json, " + author + "-ACM.json, and " + author + "-NJ.json have been created!" + "\n\n");
+			System.out.println("\n\tA total of " + numberOfRecords + " records were found for author(s) with name: " + author);
+			System.out.println("\tFiles " + author + "-IEEE.json, " + author + "-ACM.json, and " + author + "-NJ.json have been created!" + "\n\n");
 		}
 		return foundAuthor;
 	}
