@@ -16,6 +16,6 @@ public class FileExistsException extends Exception {
 	 */
 	public FileExistsException(String filename){
 		super("\nA file already exists with the name: " + filename + ".json\n" +
-				"File will be renamed as: " + filename + "-BU.json and any old BUs will be deleted.\n");
+				"File will be renamed as: " + filename + "-BU.json and any old BUs will be deleted.");
 	}
 }

@@ -248,9 +248,9 @@ public class AuthorBibCreator {
 	 */
 	public static String promptUserForAuthorName() {
 		Scanner kb = new Scanner(System.in);
-		System.out.print("Please enter the author name you are targeting: ");
+		System.out.print("Please enter the author name you are targeting (case sensitive): ");
 		String authorName = kb.nextLine();
-
+		System.out.print("\n");
 		return authorName;
 	}
 
