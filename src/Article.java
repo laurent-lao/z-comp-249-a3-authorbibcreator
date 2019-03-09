@@ -281,7 +281,7 @@ public class Article {
 		authorToString += authors[0] + " et al.";
 
 		// Add all information
-		acmFormat += authorToString + " " + year + ". " + title + ". " + journal + "." + volume + ", " + number + "(" + year + ")," + pages + ". DOI: https://doi.org/" + doi + ".";
+		acmFormat += authorToString + " " + year + ". " + title + ". " + journal + ". " + volume + ", " + number + " (" + year + "), " + pages + ". DOI: https://doi.org/" + doi + ".";
 		return acmFormat;
 	}
 
