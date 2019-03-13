@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class AuthorBibCreator {
@@ -204,11 +205,16 @@ public class AuthorBibCreator {
 						articles = Helper.appendToArticleArray(articles, currentArticle);
 					}
 
-				} catch (Exception e)
+				} catch (NoSuchElementException e)
 				{
-					// Ignore exception
+					// Ignore bibFiles has no more elements exception
 					continue;
 					// bibFiles[i].next();
+				} catch (ArticleProcessingException e)
+				{
+					// Print the Exception message
+					System.out.println(e.getMessage());
+					continue;
 				}
 			}
 		}
