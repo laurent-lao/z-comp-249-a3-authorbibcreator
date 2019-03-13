@@ -318,4 +318,148 @@ public class Article {
 				", keywords='" + keywords + '\'' +
 				'}';
 	}
+
+	/**
+	 * Get Authors
+	 * @return a String array with list of authors
+	 */
+	public String[] getAuthors() {
+		return authors;
+	}
+
+	/**
+	 * Sets Authors
+	 * @param authors a String array containing list of authors
+	 */
+	public void setAuthors(String[] authors) {
+		this.authors = authors;
+	}
+
+	/**
+	 * Gets Journal
+	 * @return a String with the name of the journal
+	 */
+	public String getJournal() {
+		return journal;
+	}
+
+	/**
+	 * Sets Journal
+	 * @param journal a String containing the name of the journal
+	 */
+	public void setJournal(String journal) {
+		this.journal = journal;
+	}
+
+	/**
+	 * Gets Title
+	 * @return a String with the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Sets Title
+	 * @param title a String containing the title
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * Gets the Year
+	 * @return a String representing the year
+	 */
+	public String getYear() {
+		return year;
+	}
+
+	/**
+	 * Sets the Year
+	 * @param year a String containing the year
+	 */
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	/**
+	 * Gets the Volume
+	 * @return a String representing the year
+	 */
+	public String getVolume() {
+		return volume;
+	}
+
+	/**
+	 * Sets the Volume
+	 * @param volume a String containing the volume
+	 */
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
+
+	/**
+	 * Gets the Number
+	 * @return a String representing the Number
+	 */
+	public String getNumber() {
+		return number;
+	}
+
+	/**
+	 * Sets the Number
+	 * @param number a String containing the Number
+	 */
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	/**
+	 * Gets the Pages
+	 * @return a String representing the Pages
+	 */
+	public String getPages() {
+		return pages;
+	}
+
+	/**
+	 * Sets the Pages
+	 * @param pages a String containing the Pages
+	 */
+	public void setPages(String pages) {
+		this.pages = pages;
+	}
+
+	/**
+	 * Gets the DOI
+	 * @return a String representing the DOI
+	 */
+	public String getDoi() {
+		return doi;
+	}
+
+	/**
+	 * Sets the DOI
+	 * @param doi a String containing the DOI
+	 */
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+
+	/**
+	 * Gets the Month
+	 * @return a String with the Month
+	 */
+	public String getMonth() {
+		return month;
+	}
+
+	/**
+	 * Sets the Month
+	 * @param month a String containing the Month
+	 */
+	public void setMonth(String month) {
+		this.month = month;
+	}
 }
