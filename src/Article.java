@@ -27,11 +27,18 @@ public class Article {
 	/**
 	 * Parameterized constructor for Article
 	 *
-	 * @param jsonData a String representing the JSON data of an article (in curly braces after @ARTICLE)
+	 * @param jsonData a string containing the jsonData to be processed into an article (after @ARTICLE)
+	 *
+	 * @throws ArticleProcessingException when any of the Article's required attribute is null
 	 */
-	public Article(String jsonData) {
+	public Article(String jsonData) throws ArticleProcessingException {
 		// use helper method to initialize the Article
 		parseInput(jsonData);
+		if (authors == null || journal == null || title == null ||
+				year == null || volume == null || number == null || pages == null || doi == null || month == null)
+		{
+			throw new ArticleProcessingException(this, jsonData);
+		}
 	}
 
 	/**
@@ -203,7 +210,9 @@ public class Article {
 
 	/**
 	 * Checks whether a string is matches "authors" attribute
+	 *
 	 * @param authorToFind a String representing the search term
+	 *
 	 * @return a bool representing whether the string was found or not
 	 */
 	public boolean authorMatches(String authorToFind) {
@@ -221,6 +230,7 @@ public class Article {
 
 	/**
 	 * Get the IEEE citation format
+	 *
 	 * @return a String containing the IEEE citation format for the article
 	 */
 	public String getIEEEformat() {
@@ -247,6 +257,7 @@ public class Article {
 
 	/**
 	 * Get the NJ citation format
+	 *
 	 * @return a String containing the NJ citation format for the article
 	 */
 	public String getNJformat() {
@@ -271,6 +282,7 @@ public class Article {
 
 	/**
 	 * Get the ACM citation format
+	 *
 	 * @return a String containing the ACM citation format for the article
 	 */
 	public String getACMformat() {
@@ -287,6 +299,7 @@ public class Article {
 
 	/**
 	 * Basic to String
+	 *
 	 * @return a String printing the attributes of the object
 	 */
 	public String toString() {
@@ -321,6 +334,7 @@ public class Article {
 
 	/**
 	 * Get Authors
+	 *
 	 * @return a String array with list of authors
 	 */
 	public String[] getAuthors() {
@@ -329,6 +343,7 @@ public class Article {
 
 	/**
 	 * Sets Authors
+	 *
 	 * @param authors a String array containing list of authors
 	 */
 	public void setAuthors(String[] authors) {
@@ -337,6 +352,7 @@ public class Article {
 
 	/**
 	 * Gets Journal
+	 *
 	 * @return a String with the name of the journal
 	 */
 	public String getJournal() {
@@ -345,6 +361,7 @@ public class Article {
 
 	/**
 	 * Sets Journal
+	 *
 	 * @param journal a String containing the name of the journal
 	 */
 	public void setJournal(String journal) {
@@ -353,6 +370,7 @@ public class Article {
 
 	/**
 	 * Gets Title
+	 *
 	 * @return a String with the title
 	 */
 	public String getTitle() {
@@ -361,6 +379,7 @@ public class Article {
 
 	/**
 	 * Sets Title
+	 *
 	 * @param title a String containing the title
 	 */
 	public void setTitle(String title) {
@@ -369,6 +388,7 @@ public class Article {
 
 	/**
 	 * Gets the Year
+	 *
 	 * @return a String representing the year
 	 */
 	public String getYear() {
@@ -377,6 +397,7 @@ public class Article {
 
 	/**
 	 * Sets the Year
+	 *
 	 * @param year a String containing the year
 	 */
 	public void setYear(String year) {
@@ -385,6 +406,7 @@ public class Article {
 
 	/**
 	 * Gets the Volume
+	 *
 	 * @return a String representing the year
 	 */
 	public String getVolume() {
@@ -393,6 +415,7 @@ public class Article {
 
 	/**
 	 * Sets the Volume
+	 *
 	 * @param volume a String containing the volume
 	 */
 	public void setVolume(String volume) {
@@ -401,6 +424,7 @@ public class Article {
 
 	/**
 	 * Gets the Number
+	 *
 	 * @return a String representing the Number
 	 */
 	public String getNumber() {
@@ -409,6 +433,7 @@ public class Article {
 
 	/**
 	 * Sets the Number
+	 *
 	 * @param number a String containing the Number
 	 */
 	public void setNumber(String number) {
@@ -417,6 +442,7 @@ public class Article {
 
 	/**
 	 * Gets the Pages
+	 *
 	 * @return a String representing the Pages
 	 */
 	public String getPages() {
@@ -425,6 +451,7 @@ public class Article {
 
 	/**
 	 * Sets the Pages
+	 *
 	 * @param pages a String containing the Pages
 	 */
 	public void setPages(String pages) {
@@ -433,6 +460,7 @@ public class Article {
 
 	/**
 	 * Gets the DOI
+	 *
 	 * @return a String representing the DOI
 	 */
 	public String getDoi() {
@@ -441,6 +469,7 @@ public class Article {
 
 	/**
 	 * Sets the DOI
+	 *
 	 * @param doi a String containing the DOI
 	 */
 	public void setDoi(String doi) {
@@ -449,6 +478,7 @@ public class Article {
 
 	/**
 	 * Gets the Month
+	 *
 	 * @return a String with the Month
 	 */
 	public String getMonth() {
@@ -457,6 +487,7 @@ public class Article {
 
 	/**
 	 * Sets the Month
+	 *
 	 * @param month a String containing the Month
 	 */
 	public void setMonth(String month) {
