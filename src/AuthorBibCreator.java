@@ -26,7 +26,7 @@ public class AuthorBibCreator {
 		String authorName = promptUserForAuthorName();
 
 		// Prepares the program's output files name
-		String[]      outputFileAuthorFormat = new String[] {authorName + "-IEEE", authorName + "-ACM", authorName + "-NJ"};
+		String[]      outputFileAuthorFormat = new String[] {spacetoHyphen(authorName) + "-IEEE", spacetoHyphen(authorName) + "-ACM", spacetoHyphen(authorName) + "-NJ"};
 		String        outputFileExtension    = ".json";
 		PrintWriter[] writeFiles             = new PrintWriter[outputFileAuthorFormat.length];        // Stores the writer for each json file
 		File[]        outputFiles            = new File[outputFileAuthorFormat.length];            // Stores the file for each json file;
@@ -258,6 +258,31 @@ public class AuthorBibCreator {
 		String authorName = kb.nextLine();
 		System.out.print("\n");
 		return authorName;
+	}
+
+	/**
+	 * Converts spaces into hyphens
+	 * @param string a String containing spaces
+	 * @return a String with its spaces replaced by hyphens
+	 */
+	public static String spacetoHyphen(String string)
+	{
+		String [] stringArray = string.split(" ");
+		String hyphened = "";
+
+		for (int i = 0; i < stringArray.length; i++)
+		{
+			if (stringArray[i].equals(" "))
+			{
+				continue;
+			}
+			else
+			{
+				hyphened += stringArray[i];
+			}
+		}
+
+		return hyphened;
 	}
 
 	/**
