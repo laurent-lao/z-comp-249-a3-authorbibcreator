@@ -31,12 +31,16 @@ public class AuthorBibCreator {
 		PrintWriter[] writeFiles             = new PrintWriter[outputFileAuthorFormat.length];        // Stores the writer for each json file
 		File[]        outputFiles            = new File[outputFileAuthorFormat.length];            // Stores the file for each json file;
 		File[]        backupFile             = new File[outputFileAuthorFormat.length];                // Stores the backup file for each json file;
+
 		for (int i = 0; i < outputFileAuthorFormat.length; i++)
 		{
 			// Create File objects with author's name
 			outputFiles[i] = new File(outputFileAuthorFormat[i] + outputFileExtension);
 			String backupFileName = outputFileAuthorFormat[i] + "-BU" + outputFileExtension;
 			backupFile[i] = new File(backupFileName);
+
+			// Debug
+			// System.out.println("Creating: " + outputFileAuthorFormat[i]);
 		}
 
 		// Attempt to open all 10 input files
@@ -126,6 +130,7 @@ public class AuthorBibCreator {
 				{
 					// If author was not found in the articles
 					System.out.println("\nNo records were found for author(s) with name: " + authorName);
+					haveToDeleteCreatedFiles = true;
 					exitMessageNumber = 4;
 				}
 			}
@@ -137,7 +142,7 @@ public class AuthorBibCreator {
 		// Delete previously created files if flag is true
 		if (haveToDeleteCreatedFiles)
 		{
-			System.out.println("Deleting created files.");
+			// System.out.println("Deleting created files.");
 
 			for (int i = 0; i < outputFileAuthorFormat.length; i++)
 			{
@@ -278,7 +283,8 @@ public class AuthorBibCreator {
 			}
 			else
 			{
-				hyphened += stringArray[i];
+				// Only adds the hyphen if it's not the first element
+				hyphened += (i == 0 ? "" : "-") + stringArray[i];
 			}
 		}
 
